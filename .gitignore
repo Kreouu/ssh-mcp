@@ -1,0 +1,23 @@
+.DS_Store
+
+# Local runtime config
+config.yaml
+
+# Build outputs
+ssh-mcp
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.cover
+coverage.*
+
+# Go workspace / tooling
+vendor/
+
+# Editor / IDE
+.idea/
+.vscode/

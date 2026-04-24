@@ -1,0 +1,49 @@
+server:
+  name: "ssh-mcp"
+  version: "0.1.0"
+  default_timeout_sec: 120
+  connect_timeout_sec: 10
+  max_output_bytes: 1048576
+  allow_dangerous: false
+
+hosts:
+  - name: "aliyun"
+    address: "47.110.154.57"
+    port: 22
+    user: "root"
+    private_key_path: "~/.ssh/id_ed25519_aliyun"
+    host_key:
+      mode: "known_hosts"
+      known_hosts_path: "~/.ssh/known_hosts"
+      # Optional: pin host key algorithms if your server only works with one.
+      # algorithms: ["ssh-ed25519"]
+
+  - name: "ubuntu_ali"
+    address: "127.0.0.1"
+    port: 2222
+    user: "ng"
+    private_key_path: "~/.ssh/id_ed25519_aliyun"
+    proxy_jump: "aliyun"
+    host_key:
+      mode: "known_hosts"
+      known_hosts_path: "~/.ssh/known_hosts"
+      # Optional: pin host key algorithms if known_hosts only has one key type.
+      # algorithms: ["ssh-ed25519"]
+
+  - name: "prod"
+    address: "127.0.0.1"
+    port: 22
+    user: "root"
+    password: "${SSH_PROD_PASSWORD}"
+    # private_key_path: "~/.ssh/id_ed25519"
+    # private_key_passphrase: "${SSH_PROD_KEY_PASSPHRASE}"
+    host_key:
+      mode: "known_hosts" # known_hosts | insecure_ignore
+      known_hosts_path: "~/.ssh/known_hosts"
+      # algorithms: ["ssh-ed25519"]
+
+policy:
+  # allow_patterns:
+  #   - "^ls "
+  # deny_patterns:
+  #   - "(?i)rm\\s+-rf"
