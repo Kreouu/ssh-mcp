@@ -590,4 +590,4 @@ command = "/Users/Ng/Documents/ssh-mcp/ssh-mcp"
 
 ## License
 
-当前仓库还没有单独声明 License。如需开源发布，建议补一个明确的许可证文件。
+本项目采用 [MIT License](./LICENSE)。
