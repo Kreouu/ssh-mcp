@@ -5,6 +5,7 @@ config.yaml
 
 # Build outputs
 ssh-mcp
+dist/
 *.exe
 *.exe~
 *.dll

@@ -1,4 +1,4 @@
-module github.com/hanhan/ssh-mcp
+module github.com/Kreouu/ssh-mcp
 
 go 1.24.4
 

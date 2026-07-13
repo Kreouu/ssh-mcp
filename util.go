@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+func boolPtr(value bool) *bool {
+	return &value
+}
+
 var envKeyPattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
 
 func isValidEnvKey(key string) bool {

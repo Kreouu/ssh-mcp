@@ -15,10 +15,24 @@
 
 ## 环境要求
 
-- Go `1.22+`
+- 使用预编译版本：无需安装 Go
+- 自行构建：Go `1.24.4+`
 - 目标主机已开启 SSH
 
-## 构建
+## 安装
+
+推荐从 [GitHub Releases](https://github.com/Kreouu/ssh-mcp/releases) 下载对应系统和架构的压缩包，并使用同一 Release 中的 `checksums.txt` 校验。
+
+也可以把下面这句话交给 Codex、Claude Code 或其他 Agent：
+
+```text
+Install and configure ssh-mcp by following this guide:
+https://raw.githubusercontent.com/Kreouu/ssh-mcp/main/docs/agent-install.md
+```
+
+离线环境可在联网设备下载 `ssh-mcp-<version>-offline.zip`，再完整复制到目标设备。
+
+## 自行构建
 
 ```bash
 go build -o ssh-mcp
@@ -73,9 +87,9 @@ server:
 
 hosts:
   - name: "prod"
-    address: "1.2.3.4"
+    address: "192.168.1.50"
     port: 22
-    user: "root"
+    user: "pi"
     private_key_path: "~/.ssh/id_ed25519"
     host_key:
       mode: "known_hosts"
@@ -107,6 +121,7 @@ policy:
 - `timeout_sec`：可选，超时秒数
 
 命令通过 `bash -lc` 执行。
+`workdir` 请使用远程绝对路径，例如 `/home/pi/workspace`，不要使用 `~/workspace`。
 
 ### `ssh_upload`
 

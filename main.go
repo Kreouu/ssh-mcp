@@ -44,33 +44,19 @@ func main() {
 		return
 	}
 
-	server := mcp.NewServer(&mcp.Implementation{
-		Name:    cfg.Server.Name,
-		Version: cfg.Server.Version,
-	}, nil)
-
-	mcp.AddTool(server, &mcp.Tool{
-		Name:        "ssh_list_hosts",
-		Description: "List configured SSH hosts.",
-	}, app.handleListHosts)
-
-	mcp.AddTool(server, &mcp.Tool{
-		Name:        "ssh_exec",
-		Description: "Execute a shell command on a remote host via SSH.",
-	}, app.handleExec)
-
-	mcp.AddTool(server, &mcp.Tool{
-		Name:        "ssh_upload",
-		Description: "Upload a local file or directory to a remote host via SFTP.",
-	}, app.handleUpload)
-
-	mcp.AddTool(server, &mcp.Tool{
-		Name:        "ssh_download",
-		Description: "Download a remote file or directory via SFTP.",
-	}, app.handleDownload)
+	server := newMCPServer(cfg, app)
 
 	if err := server.Run(context.Background(), &AutoTransport{}); err != nil {
 		logger.Println("mcp run error:", err)
 		os.Exit(1)
 	}
+}
+
+func newMCPServer(cfg *Config, app *App) *mcp.Server {
+	server := mcp.NewServer(&mcp.Implementation{
+		Name:    cfg.Server.Name,
+		Version: cfg.Server.Version,
+	}, nil)
+	app.addTools(server)
+	return server
 }

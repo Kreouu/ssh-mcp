@@ -18,6 +18,42 @@ type ListHostsOutput struct {
 	Hosts []HostInfo `json:"hosts"`
 }
 
+func (a *App) addTools(server *mcp.Server) {
+	readOnly := &mcp.ToolAnnotations{
+		ReadOnlyHint:    true,
+		DestructiveHint: boolPtr(false),
+		OpenWorldHint:   boolPtr(false),
+	}
+	remoteMutation := &mcp.ToolAnnotations{
+		DestructiveHint: boolPtr(true),
+		OpenWorldHint:   boolPtr(true),
+	}
+
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "ssh_list_hosts",
+		Description: "List configured SSH hosts. Call this before choosing a host.",
+		Annotations: readOnly,
+	}, a.handleListHosts)
+
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "ssh_exec",
+		Description: "Execute a non-interactive Bash command on a configured SSH host and return stdout, stderr, and exit status. Use an absolute remote workdir.",
+		Annotations: remoteMutation,
+	}, a.handleExec)
+
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "ssh_upload",
+		Description: "Upload a local file or directory to a configured SSH host via SFTP.",
+		Annotations: remoteMutation,
+	}, a.handleUpload)
+
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "ssh_download",
+		Description: "Download a remote file or directory from a configured SSH host via SFTP.",
+		Annotations: remoteMutation,
+	}, a.handleDownload)
+}
+
 func (a *App) handleListHosts(ctx context.Context, req *mcp.CallToolRequest, input struct{}) (*mcp.CallToolResult, ListHostsOutput, error) {
 	names := make([]string, 0, len(a.hosts))
 	for name := range a.hosts {
