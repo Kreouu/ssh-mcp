@@ -156,14 +156,6 @@ args = ["-config", "/Users/Ng/Documents/ssh-mcp/config.yaml"]
 - 给远程账号最小权限
 - 按需配置 `policy.allow_patterns`
 
-## 发布
-
-推送名称匹配 `v*` 的 Git 标签会触发 GitHub Actions，构建各平台压缩包、离线包和 `checksums.txt`，并创建对应的 GitHub Release。发布版本号会从标签自动写入二进制。
-
-```bash
-git tag -a v0.1.0 -m "v0.1.0"
-git push origin v0.1.0
-```
 
 ## License
 
