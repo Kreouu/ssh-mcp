@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
+
+var buildVersion string
 
 func main() {
 	var configPath string
@@ -23,6 +26,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "config error:", err)
 		os.Exit(1)
 	}
+	cfg.Server.Version = resolveVersion(cfg.Server.Version, buildVersion)
 
 	logger := log.New(os.Stderr, "ssh-mcp: ", log.LstdFlags)
 	policy, err := NewCommandPolicy(cfg.Policy, cfg.Server.AllowDangerous)
@@ -50,6 +54,13 @@ func main() {
 		logger.Println("mcp run error:", err)
 		os.Exit(1)
 	}
+}
+
+func resolveVersion(configured, built string) string {
+	if built != "" {
+		return strings.TrimPrefix(built, "v")
+	}
+	return configured
 }
 
 func newMCPServer(cfg *Config, app *App) *mcp.Server {

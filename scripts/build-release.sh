@@ -2,6 +2,7 @@
 set -euo pipefail
 
 version="${VERSION:-dev}"
+binary_version="${version#v}"
 root="$(cd "$(dirname "$0")/.." && pwd)"
 dist="$root/dist"
 stage="$dist/stage"
@@ -29,7 +30,7 @@ for target in "${targets[@]}"; do
   (
     cd "$root"
     CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" go build \
-      -trimpath -ldflags="-s -w" -o "$dir/$binary" .
+      -trimpath -ldflags="-s -w -X main.buildVersion=$binary_version" -o "$dir/$binary" .
   )
   cp "$root/config.example.yaml" "$root/README.md" "$root/LICENSE" "$dir/"
   if [[ "$goos" == "windows" ]]; then
