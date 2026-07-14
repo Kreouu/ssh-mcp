@@ -2,24 +2,25 @@ name: ci
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
           cache: true
       - run: go test -race ./...
       - run: go vet ./...
-      - name: Cross-compile
-        shell: bash
+      - name: Verify release bundles
+        env:
+          VERSION: v0.0.0-ci
         run: |
-          set -euo pipefail
-          for target in "darwin amd64" "darwin arm64" "linux amd64" "linux arm64" "windows amd64"; do
-            read -r goos goarch <<<"$target"
-            CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" go build -o /tmp/ssh-mcp .
-          done
+          bash scripts/build-release.sh
+          cd dist
+          sha256sum -c checksums.txt
